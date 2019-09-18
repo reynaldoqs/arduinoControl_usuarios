@@ -25,6 +25,30 @@ router.post('/validacion', verifyAuth, async (req, res) => {
         res.status(400).send({error})
     }
 })
+router.get('/validacion', verifyAuth, async (req, res) => {
+    try {
+        const user = req.user
+        const query = req.query
+        console.log(query)
+
+        const options = {
+            ...query,
+            leanWithId: false,
+            populate: {
+                path: '_validador',
+                select: 'cargo email nombres apPaterno apMaterno -_id'
+            }
+        }
+
+        const results = await Validacion.paginate({}, options);
+        if(!results) return res.status(500).send({error:'DB internal error'})
+
+        res.send(results)
+    } catch (error) {
+        res.status(400).send({error})
+    }
+})
+
 
 
 module.exports = router

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const validacionSchema = mongoose.Schema({
     _validador: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -53,6 +54,9 @@ const validacionSchema = mongoose.Schema({
         default: false,
     }
 })
+
+
+validacionSchema.plugin(mongoosePaginate)
 
 const Validacion = mongoose.model('Validacion', validacionSchema)
 
