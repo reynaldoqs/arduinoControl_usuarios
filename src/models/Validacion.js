@@ -2,29 +2,13 @@ const mongoose = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate-v2');
 
 const validacionSchema = mongoose.Schema({
-    _validador: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    usuario: {
-        idTarjeta: {
-            type: Number
-        },
-        nombres: {
-            type: String
-        },
-        apellidoPaterno: {
-            type: String
-        },
-        apellidoMaterno: {
-            type: String
-        },
-        ci: {
-            type: String
-        },
-    },
+    _validador: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
+    _cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Cliente' },
     fechaValidacion: {
         type: Date,
         default: Date.now()
     },
-    observacion: {
+    observaciones: {
         type: String,
         required: false,
         trim: true

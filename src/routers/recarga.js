@@ -1,20 +1,26 @@
 const express = require('express')
-const Validacion = require('../models/Validacion')
+const Recarga = require('../models/Recarga')
+const Cliente = require('../models/Cliente')
 const verifyAuth = require('../middleware/auth')
 
 const router = express.Router()
 
-router.post('/validacion', verifyAuth, async (req, res) => {
+router.post('/recarga', verifyAuth, async (req, res) => {
     try {
         const user = req.user
-        const data = req.body
-
-        const validacion = new Validacion({
-            ...data,
-            _validador: user._id
+        const {_cliente, montoRecarga} = req.body
+        const clienteDB = await Cliente.findById(_cliente)
+        if(!clienteDB) return res.status(500).send({error:'Internal error'})
+        const creditoPrevio = clienteDB.credito
+        await Cliente.updateOne({_id:_cliente},{credito: (creditoPrevio + montoRecarga)})
+        const recarga = new Recarga({
+            _cliente,
+            _cajero: user._id,
+            montoRecarga,
+            creditoPrevio
         })
-        const newValidacion = await validacion.save()
-        if(!newValidacion) return res.status(500).send({error:'Internal error'})
+        const newRecarga = await recarga.save()
+        if(!newRecarga) return res.status(500).send({error:'Internal error'})
 
         res.send(newValidacion)
     } catch (error) {
@@ -24,7 +30,7 @@ router.post('/validacion', verifyAuth, async (req, res) => {
 router.get('/validacion', verifyAuth, async (req, res) => {
     try {
         const query = req.query
-        console.log(query)
+
         const options = {
             ...query,
             leanWithId: false,

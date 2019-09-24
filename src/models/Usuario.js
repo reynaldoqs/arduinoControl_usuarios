@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const userSchema = mongoose.Schema({
     nombres: {
@@ -9,12 +10,12 @@ const userSchema = mongoose.Schema({
         required: true,
         trim: true
     },
-    apPaterno: {
+    apellidoPaterno: {
         type: String,
         required: false,
         trim: true
     },
-    apMaterno: {
+    apellidoMaterno: {
         type: String,
         required: false,
         trim: true
@@ -37,7 +38,7 @@ const userSchema = mongoose.Schema({
     cargo: {
         type: String,
         required: true,
-        enum: ['administrador', 'transito', 'cajero', 'odeco', 'observador'],
+        enum: ['administrador', 'transito-validador', 'transito-administrador', 'cajero', 'odeco', 'observador'],
         trim: true,
         default: 'observador'
     },
@@ -75,7 +76,7 @@ userSchema.pre('save', async function(next) {
 
 userSchema.methods.generateAuthToken = async function() {
     const user = this
-    const token = jwt.sign({_id: user._id}, process.env.JWT_KEY, { expiresIn: '12h'})
+    const token = jwt.sign({_id: user._id}, process.env.JWT_KEY,/* { expiresIn: '12h'}*/)
     user.tokens = user.tokens.concat({token})
     await user.save()
     return token
@@ -130,7 +131,7 @@ userSchema.statics.findByEmailAndRemove = async (email) => {
         return null
     }
 }
-
-const User = mongoose.model('User', userSchema)
+userSchema.plugin(mongoosePaginate)
+const User = mongoose.model('Usuario', userSchema)
 
 module.exports = User
