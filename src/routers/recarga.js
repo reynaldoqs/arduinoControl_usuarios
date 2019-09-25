@@ -22,21 +22,20 @@ router.post('/recarga', verifyAuth, async (req, res) => {
         const newRecarga = await recarga.save()
         if(!newRecarga) return res.status(500).send({error:'Internal error'})
 
-        res.send(newValidacion)
+        res.send(newRecarga)
     } catch (error) {
         res.status(400).send({error})
     }
 })
-router.get('/validacion', verifyAuth, async (req, res) => {
+router.get('/recarga', verifyAuth, async (req, res) => {
     try {
         const query = req.query
-
         const options = {
             ...query,
             leanWithId: false,
             populate: [
                 {
-                    path: '_validador',
+                    path: '_cajero',
                     select: 'cargo email nombres apellidoPaterno apellidoMaterno -_id'
                 },
                 {
@@ -46,8 +45,8 @@ router.get('/validacion', verifyAuth, async (req, res) => {
             ]
         }
 
-        const results = await Validacion.paginate({}, options);
-        if(!results) return res.status(500).send({error:'DB internal error'})
+        const results = await Recarga.paginate({}, options);
+        if(!results) return res.status(500).send({error:'Internal error'})
 
         res.send(results)
     } catch (error) {

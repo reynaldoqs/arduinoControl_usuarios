@@ -13,7 +13,7 @@ const recargaSchema = mongoose.Schema({
         required: true
     },
     creditoPrevio: {
-        type: Boolean,
+        type: Number,
         default: false,
     }
 })

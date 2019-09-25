@@ -33,6 +33,7 @@ router.patch('/objetos/:id', verifyAuth, async (req, res) => {
     try {
         const body = req.body
         const id = req.params.id
+
         const objectoUpdated = await ObjetoPerdido.findByIdAndUpdate(id,{...body},{new:true})
         if(!objectoUpdated) return res.status(500).send({error:'Internal Error'})
         

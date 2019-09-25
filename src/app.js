@@ -3,6 +3,7 @@ const userRouter = require('./routers/usuario')
 const validacionRouter = require('./routers/validacion')
 const objetosRouter = require('./routers/objetoPerdido')
 const clienteRouter = require('./routers/cliente')
+const recargasRouter = require('./routers/recarga')
 const socketActions = require('./routers/socket')
 const cors = require('cors')
 const port = process.env.PORT
@@ -19,9 +20,10 @@ app.use(userRouter)
 app.use(validacionRouter)
 app.use(objetosRouter)
 app.use(clienteRouter)
+app.use(recargasRouter)
 //socket route
-app.post('/socket',  socketActions.descuento(io))
-app.get('/socket',  socketActions.validacion(io))
+app.post('/socket_desc',  socketActions.descuento(io))
+app.post('/socket_val',  socketActions.validacion(io))
 
 server.listen(port, () => {
   console.log(`Server running on port ${port}`)
