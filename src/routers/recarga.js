@@ -1,16 +1,16 @@
 const express = require('express')
 const Recarga = require('../models/Recarga')
 const Cliente = require('../models/Cliente')
-const verifyAuth = require('../middleware/auth')
-
+const authorize = require('../middleware/auth')
+const cargos = require('../helpers/cargos')
 const router = express.Router()
 
-router.post('/recarga', verifyAuth, async (req, res) => {
+router.post('/recarga', authorize([cargos.admin, cargos.cajero]), async (req, res) => {
     try {
         const user = req.user
         const {_cliente, montoRecarga} = req.body
         const clienteDB = await Cliente.findById(_cliente)
-        if(!clienteDB) return res.status(500).send({error:'Internal error'})
+        if(!clienteDB) return res.status(500).send({error:'Error interno'})
         const creditoPrevio = clienteDB.credito
         await Cliente.updateOne({_id:_cliente},{credito: (creditoPrevio + montoRecarga)})
         const recarga = new Recarga({
@@ -20,14 +20,14 @@ router.post('/recarga', verifyAuth, async (req, res) => {
             creditoPrevio
         })
         const newRecarga = await recarga.save()
-        if(!newRecarga) return res.status(500).send({error:'Internal error'})
+        if(!newRecarga) return res.status(500).send({error:'Error interno'})
 
         res.send(newRecarga)
     } catch (error) {
         res.status(400).send({error})
     }
 })
-router.get('/recarga', verifyAuth, async (req, res) => {
+router.get('/recarga', authorize([cargos.admin, cargos.cajero]), async (req, res) => {
     try {
         const query = req.query
         const options = {
@@ -46,7 +46,7 @@ router.get('/recarga', verifyAuth, async (req, res) => {
         }
 
         const results = await Recarga.paginate({}, options);
-        if(!results) return res.status(500).send({error:'Internal error'})
+        if(!results) return res.status(500).send({error:'Error interno'})
 
         res.send(results)
     } catch (error) {

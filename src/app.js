@@ -26,7 +26,7 @@ app.post('/socket_desc',  socketActions.descuento(io))
 app.post('/socket_val',  socketActions.validacion(io))
 
 server.listen(port, () => {
-  console.log(`Server running on port ${port}`)
+  console.log('\x1b[32m',`---> Server corriendo en el puerto ${port}`,'\x1b[0m')
 })
 
 

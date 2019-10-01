@@ -2,7 +2,6 @@ const Cliente = require('../models/Cliente')
 const discount = (io) => {
     return async function(req, res) {
         try {
-            console.log(req.body);
             const {idTarjeta,terminalMac} = req.body
             // verificar termincal mac con un registro de macs habilidattas
             const cliente = await Cliente.findOne({idTarjeta})
