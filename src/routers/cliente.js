@@ -1,9 +1,9 @@
-const express = require('express')
+const { Router } = require('express')
 const Cliente = require('../models/Cliente')
 const authorize = require('../middleware/auth')
 const cargos = require('../helpers/cargos')
 
-const router = express.Router()
+const router = Router()
 
 router.post('/clientes', authorize([cargos.admin,cargos.tAdmin]), async (req, res) => {
     try {
@@ -40,6 +40,18 @@ router.patch('/clientes/:id', authorize([cargos.admin,cargos.tAdmin]), async (re
         const clienteUpdated = await Cliente.updateOne({_id:id},body)
         if(!clienteUpdated) return res.status(500).send({error:'Error interno'})
         res.status(200).send(clienteUpdated)
+    } catch (error) {
+        res.status(400).send({error})
+    }
+})
+
+router.get('/clientes/:id', authorize([cargos.admin,cargos.tAdmin]), async (req,res) =>{
+
+    try {
+        const id = req.params.id
+        const cliente = await Cliente.findById(id)
+        if(!cliente) return res.status(500).send({error:'Error interno'})
+        res.status(200).send(cliente)
     } catch (error) {
         res.status(400).send({error})
     }

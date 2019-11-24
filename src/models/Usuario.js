@@ -21,7 +21,7 @@ const userSchema = mongoose.Schema({
         trim: true
     },
     ci: {
-        type: String,
+        type: Number,
         required: true,
         trim: true
     },

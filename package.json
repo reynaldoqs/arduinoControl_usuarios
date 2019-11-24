@@ -5,7 +5,7 @@
   "main": "app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "env-cmd -f ./.env nodemon src/app.js"
+    "serve": "env-cmd -f ./.env nodemon src/app.js"
   },
   "author": "",
   "license": "ISC",

@@ -16,6 +16,7 @@ const io = require('socket.io')(server)
 
 app.use(cors({ origin: '*' }))
 app.use(express.json())
+
 app.use(userRouter)
 app.use(validacionRouter)
 app.use(objetosRouter)
