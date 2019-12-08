@@ -14,7 +14,7 @@ const recargaSchema = mongoose.Schema({
     },
     creditoPrevio: {
         type: Number,
-        default: false,
+        default: 0,
     }
 })
 

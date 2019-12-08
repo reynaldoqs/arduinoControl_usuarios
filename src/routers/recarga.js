@@ -40,7 +40,7 @@ router.get('/recarga', authorize([cargos.admin, cargos.cajero]), async (req, res
                 },
                 {
                     path: '_cliente',
-                    select: 'nombres apellidoPaterno apellidoMaterno ci -_id'
+                    select: 'nombres apellidoPaterno credito apellidoMaterno ci -_id'
                 }
             ]
         }

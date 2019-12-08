@@ -1,36 +1,36 @@
 const express = require('express')
-const authorize = require('../middleware/auth')
-const ObjetoPerdido = require('../models/ObjetoPerdido')
+const Destino = require('../models/Destino')
 const router = express.Router()
 const cargos = require('../helpers/cargos')
+const authorize = require('../middleware/auth')
 
-router.post('/objetos', authorize([cargos.admin, cargos.odeco]), async (req, res) => {
-    try {
-        const body = req.body
-        const objectoSaved = new ObjetoPerdido(body)
-        await objectoSaved.save()
-        res.status(204).send()
-    } catch (error) {
-        res.status(400).send({error})
-    }
-})
-
-router.get('/objetos', /*authorize([cargos.admin, cargos.odeco]),*/ async (req, res) => {
+router.get('/destinos', async (req, res) => {
     try {
         const query = req.query
         const options = {
             ...query,
-            leanWithId: false,
+            leanWithId: false
         }
-        const results = await ObjetoPerdido.paginate({}, options);
+        const results = await Destino.paginate({}, options);
         if(!results) return res.status(500).send({error:'Error interno'})
-
         res.send(results)
     } catch (error) {
         res.status(400).send({error})
     }
 })
-router.patch('/objetos/:id', authorize([cargos.admin, cargos.odeco]), async (req, res) => {
+
+router.post('/destinos',/* authorize([cargos.admin, cargos.odeco]),*/ async (req, res) => {
+    try {
+        const data = req.body
+        const destino = new Destino(data)
+        const newDestino = await destino.save()
+        if(!newDestino) return res.status(500).send({error:'Error interno'})
+        res.send(newDestino)
+    } catch (error) {
+        res.status(400).send({error})
+    }
+})
+router.patch('/objetos/:id', async (req, res) => {
     try {
         const body = req.body
         const id = req.params.id

@@ -5,7 +5,7 @@ const cargos = require('../helpers/cargos')
 
 const router = Router()
 
-router.post('/clientes', authorize([cargos.admin,cargos.tAdmin]), async (req, res) => {
+router.post('/clientes', authorize([cargos.admin, cargos.tAdmin]), async (req, res) => {
     try {
         const data = req.body
         const cliente = new Cliente(data)
@@ -17,7 +17,7 @@ router.post('/clientes', authorize([cargos.admin,cargos.tAdmin]), async (req, re
         res.status(400).send({error})
     }
 })
-router.get('/clientes', authorize([cargos.admin,cargos.tAdmin]), async (req, res) => {
+router.get('/clientes', async (req, res) => {
     try {
         const query = req.query
         const options = {
@@ -33,7 +33,7 @@ router.get('/clientes', authorize([cargos.admin,cargos.tAdmin]), async (req, res
     }
 })
 
-router.patch('/clientes/:id', authorize([cargos.admin,cargos.tAdmin]), async (req, res) => {
+router.patch('/clientes/:id', authorize([cargos.admin, cargos.tAdmin]), async (req, res) => {
     try {
         const id = req.params.id
         const body = req.body
@@ -45,7 +45,7 @@ router.patch('/clientes/:id', authorize([cargos.admin,cargos.tAdmin]), async (re
     }
 })
 
-router.get('/clientes/:id', authorize([cargos.admin,cargos.tAdmin]), async (req,res) =>{
+router.get('/clientes/:id', authorize([cargos.admin, cargos.tAdmin]), async (req,res) =>{
 
     try {
         const id = req.params.id
