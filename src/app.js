@@ -19,6 +19,11 @@ const io = require('socket.io')(server)
 app.use(cors({ origin: '*' }))
 app.use(express.json())
 
+app.get('/', (req,res) => {
+  res.sendFile('./public/index.html', {root:__dirname})
+})
+app.use('/public', express.static(__dirname + '/public'));
+
 app.use(userRouter)
 app.use(validacionRouter)
 app.use(objetosRouter)
