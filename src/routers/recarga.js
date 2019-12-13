@@ -27,9 +27,10 @@ router.post('/recarga', authorize([cargos.admin, cargos.cajero]), async (req, re
         res.status(400).send({error})
     }
 })
-router.get('/recarga', authorize([cargos.admin, cargos.cajero]), async (req, res) => {
+router.get('/recarga', authorize([cargos.admin, cargos.cajero, cargos.tAdmin]), async (req, res) => {
     try {
         const query = req.query
+        console.log(req.user)
         const options = {
             ...query,
             leanWithId: false,

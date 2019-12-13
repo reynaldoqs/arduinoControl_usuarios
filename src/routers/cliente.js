@@ -33,7 +33,7 @@ router.get('/clientes', async (req, res) => {
     }
 })
 
-router.patch('/clientes/:id', authorize([cargos.admin, cargos.tAdmin]), async (req, res) => {
+router.patch('/clientes/:id', authorize([cargos.admin, cargos.tAdmin, cargos.tValidador, cargos.cajero]), async (req, res) => {
     try {
         const id = req.params.id
         const body = req.body

@@ -17,7 +17,7 @@ const validacionSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    exintor: {
+    extintor: {
         type: Boolean,
         default: false,
     },

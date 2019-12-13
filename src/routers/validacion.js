@@ -22,7 +22,7 @@ router.post('/validacion', authorize([cargos.admin,cargos.tValidador]), async (r
         res.status(400).send({error})
     }
 })
-router.get('/validacion', authorize([cargos.admin,cargos.tValidador]), async (req, res) => {
+router.get('/validacion', authorize([cargos.admin,cargos.tValidador,cargos.tAdmin]), async (req, res) => {
     try {
         const query = req.query
 
@@ -36,7 +36,7 @@ router.get('/validacion', authorize([cargos.admin,cargos.tValidador]), async (re
                 },
                 {
                     path: '_cliente',
-                    select: 'nombres apellidoPaterno apellidoMaterno ci -_id'
+                    select: 'nombres apellidoPaterno apellidoMaterno ci idTarjeta -_id'
                 }
             ]
         }
