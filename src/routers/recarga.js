@@ -27,10 +27,59 @@ router.post('/recarga', authorize([cargos.admin, cargos.cajero]), async (req, re
         res.status(400).send({error})
     }
 })
-router.get('/recarga', authorize([cargos.admin, cargos.cajero, cargos.tAdmin]), async (req, res) => {
+router.get('/recarga', authorize([cargos.admin, cargos.cajero, cargos.tAdmin, cargos.cajero]), async (req, res) => {
     try {
         const query = req.query
-        console.log(req.user)
+        const customQuery = JSON.parse(query.query)
+        const type = customQuery.mode || "normal"
+        let searchQuery = customQuery.search || ""
+        searchQuery = searchQuery.toLowerCase()
+        const options = {
+            ...query,
+            leanWithId: true,
+            sort: { fechaRecarga: -1 },
+            populate: [
+                {
+                    path: '_cajero',
+                    select: 'cargo email nombres apellidoPaterno apellidoMaterno -_id'
+                },
+                {
+                    path: '_cliente',
+                    select: 'nombres apellidoPaterno credito apellidoMaterno ci idTarjeta -_id'
+                }
+            ]
+        }
+        
+        const results = await Recarga.paginate({}, options);
+        if(!results) return res.status(500).send({error:'Error interno'})
+
+        if(type === "search"){
+        
+            results.docs = results.docs.filter(x => x._cliente?true:false)
+            results.docs = results.docs.filter(x => {
+                let others = x._cliente.idTarjeta + " " +x._cliente.ci
+                let formet = x._cliente.nombres + " " + x._cliente.apellidoPaterno +" "+x._cliente.apellidoMaterno
+                return (formet.toLowerCase().includes(searchQuery) || others.includes(searchQuery))
+            })
+            results.limit = results.docs.length
+            results.totalDocs = results.docs.length
+        }
+
+        res.send(results)
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({error})
+    }
+})
+//cambiar a una ruta aparte llamada reportes
+router.get('/recargas', authorize([cargos.admin, cargos.cajero, cargos.tAdmin]), async (req, res) => {
+    
+    const init = new Date('2012')
+    const final = new Date('2019')
+    //const result = Recarga.find({"fechaRecarga": { "$gte"}})
+    
+    try {
+        const query = req.query
         const options = {
             ...query,
             leanWithId: false,
