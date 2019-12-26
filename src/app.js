@@ -34,6 +34,7 @@ app.use(destinos)
 //socket route
 app.post('/socket_desc',  socketActions.descuento(io))
 app.post('/socket_val',  socketActions.validacion(io))
+app.post('/socket_reg',  socketActions.registroRetorno(io))
 
 server.listen(port, () => {
   console.log('\x1b[32m',`---> Server corriendo en el puerto ${port}`,'\x1b[0m')

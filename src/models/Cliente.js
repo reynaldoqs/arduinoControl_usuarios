@@ -32,6 +32,10 @@ const clienteSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    estado: {
+        type: Boolean,
+        default: false
+    },
     photoUrl:{
         type: String
     },
